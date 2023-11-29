@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Arrays;
+import java.util.StringJoiner;
 
 @NoArgsConstructor
 public class GameProcessorImpl implements GameProcessor {
@@ -20,17 +21,20 @@ public class GameProcessorImpl implements GameProcessor {
     private char[] currentWord;
     private int totalAttempts = 6;
     private int failedAttempts;
+    private char[] wrongLetters;
 
     @Override
     public void start() {
         System.out.println("Игра началась!");
         this.setGameOn(true);
         failedAttempts = 0;
+        wrongLetters = new char[0];
         answer = wordGenerator.getRandomWord();
         currentWord = new char[answer.length];
         for (int i = 0; i < answer.length; i++) {
             currentWord[i] = '_';
         }
+        renderer.render(currentWord, failedAttempts, totalAttempts, false, String.valueOf(wrongLetters));
         while (isGameOn()) {
             handleAttempt();
         }
@@ -52,6 +56,7 @@ public class GameProcessorImpl implements GameProcessor {
 
     @Override
     public void handleAttempt() {
+        // TODO: do not append duplicated letter into missing letters
         if (!isGameOn()) {
             System.out.println("Игра окончена");
             return;
@@ -69,17 +74,20 @@ public class GameProcessorImpl implements GameProcessor {
             }
         } else {
             failedAttempts++;
+            wrongLetters = increaseArraySize(wrongLetters);
+            wrongLetters[wrongLetters.length - 1] = suggestedLetter;
+            Arrays.sort(wrongLetters);
         }
 
         boolean finish = Arrays.equals(currentWord, answer);
 
         if (finish) {
-            renderer.render(currentWord, failedAttempts, totalAttempts, finish);
+            renderer.render(currentWord, failedAttempts, totalAttempts, finish, String.valueOf(wrongLetters));
             stop();
             return;
         }
 
-        renderer.render(currentWord, failedAttempts, totalAttempts, finish);
+        renderer.render(currentWord, failedAttempts, totalAttempts, finish, String.valueOf(wrongLetters));
         if (failedAttempts >= totalAttempts) {
             stop();
         }
@@ -98,5 +106,13 @@ public class GameProcessorImpl implements GameProcessor {
             }
         }
         return res;
+    }
+
+    private char[] increaseArraySize(char[] array) {
+        char[] buffRes = new char[array.length + 1];
+        System.arraycopy(array, 0, buffRes, 0, array.length);
+        array = new char[buffRes.length];
+        System.arraycopy(buffRes, 0, array, 0, buffRes.length);
+        return array;
     }
 }

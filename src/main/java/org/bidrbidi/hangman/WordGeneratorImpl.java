@@ -19,7 +19,7 @@ public class WordGeneratorImpl implements WordGenerator {
     @Override
     public final char[] getRandomWord() {
         try {
-            URL url = new URL("https://random-wfford-api.herokuapp.com/word?length=6");
+            URL url = new URL("https://random-word-api.herokuapp.com/word?length=6");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -32,6 +32,7 @@ public class WordGeneratorImpl implements WordGenerator {
             con.disconnect();
             ANSWER = content.subSequence(2, content.length() - 2).toString().toUpperCase();
         } catch (IOException e) {
+            System.out.println(e);
             ANSWER = LOCAL_WORDS[ThreadLocalRandom.current().nextInt(0, LOCAL_WORDS.length)];
         }
         return ANSWER.toCharArray();

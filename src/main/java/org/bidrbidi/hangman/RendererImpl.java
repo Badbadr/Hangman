@@ -7,8 +7,8 @@ public class RendererImpl implements Renderer {
             \n
             \n
             \n
-            ========     || Слово:
-            ||     |     || %s
+            ========     || Слово:           || Отсутствующие буквы:
+            ||     |     || %s           || %s
             ||     |     ||------------------
             ||           || Осталось попыток:
             ||           || %d
@@ -23,8 +23,8 @@ public class RendererImpl implements Renderer {
             \n
             \n
             \n
-            ========     || Слово:
-            ||     |     || %s
+            ========     || Слово:           || Отсутствующие буквы:
+            ||     |     || %s           || %s
             ||     |     ||------------------
             ||     O     || Осталось попыток:
             ||           || %d
@@ -39,14 +39,14 @@ public class RendererImpl implements Renderer {
             \n
             \n
             \n
-            ========     || Слово:
-            ||     |     || %s
-            ||     |     ||------------------
-            ||     O     || Осталось попыток:
-            ||     |     || %d
-            ||           ||------------------
-            ||           ||
-            =========    ||
+            ========     || Слово:           || Отсутствующие буквы: 
+            ||     |     || %s           || %s                  
+            ||     |     ||------------------                  
+            ||     O     || Осталось попыток:                   
+            ||    /      || %d                    
+            ||           ||------------------                     
+            ||           ||                  
+            =========    ||                  
             """;
 
     private final static String THIRD_WRONG_ATTEMPT = """
@@ -55,14 +55,14 @@ public class RendererImpl implements Renderer {
             \n
             \n
             \n
-            ========     || Слово:
-            ||     |     || %s
-            ||     |     ||------------------
-            ||     O     || Осталось попыток:
-            ||    /|     || %d
-            ||           ||------------------
-            ||           ||
-            =========    ||
+            ========     || Слово:           || Отсутствующие буквы: 
+            ||     |     || %s           || %s                  
+            ||     |     ||------------------                  
+            ||     O     || Осталось попыток:                   
+            ||    /|     || %d                    
+            ||           ||------------------                     
+            ||           ||                  
+            =========    ||                  
             """;
 
     private final static String FOURTH_WRONG_ATTEMPT = """
@@ -71,14 +71,14 @@ public class RendererImpl implements Renderer {
             \n
             \n
             \n
-            ========     || Слово:
-            ||     |     || %s
-            ||     |     ||------------------
-            ||     O     || Осталось попыток:
-            ||    /|\\    || %d
-            ||           ||------------------
-            ||           ||
-            =========    ||
+            ========     || Слово:           || Отсутствующие буквы: 
+            ||     |     || %s           || %s                  
+            ||     |     ||------------------                  
+            ||     O     || Осталось попыток:                   
+            ||    /|\\    || %d                    
+            ||           ||------------------                     
+            ||           ||                  
+            =========    ||                  
             """;
 
     private final static String FIFTH_WRONG_ATTEMPT = """
@@ -87,14 +87,14 @@ public class RendererImpl implements Renderer {
             \n
             \n
             \n
-            ========     || Слово:
-            ||     |     || %s
-            ||     |     ||------------------
-            ||     O     || Осталось попыток:
-            ||    /|\\    || %d
-            ||     Г     ||------------------
-            ||           ||
-            =========    ||
+            ========     || Слово:           || Отсутствующие буквы: 
+            ||     |     || %s           || %s                  
+            ||     |     ||------------------                  
+            ||     O     || Осталось попыток:                   
+            ||    /|\\    || %d                    
+            ||     Г     ||------------------                     
+            ||           ||                  
+            =========    ||          
             """;
 
     private final static String GAME_OVER = """
@@ -103,14 +103,14 @@ public class RendererImpl implements Renderer {
             \n
             \n
             \n
-            ========     || Слово:
-            ||     |     || %s
-            ||     |     ||------------------
-            ||     O     || Осталось попыток:
-            ||    /|\\    || %d
-            ||     П     ||------------------
-            ||           || Ответ:
-            =========    || %s
+            ========     || Слово:           || Отсутствующие буквы: 
+            ||     |     || %s           || %s                  
+            ||     |     ||------------------                  
+            ||     O     || Осталось попыток:                   
+            ||    /|\\    || %d                    
+            ||     П     ||------------------                     
+            ||           || Ответ:                  
+            =========    || %s                   
             """;
 
     private final static String[] states = {INITIAL_STATE, FIRST_WRONG_ATTEMPT, SECOND_WRONG_ATTEMPT,
@@ -119,14 +119,14 @@ public class RendererImpl implements Renderer {
     private final WordGenerator wordGenerator = WordGeneratorImpl.getInstance();
 
     @Override
-    public void render(char[] currentWord, int failedAttempts, int totalAttempts, boolean finish) {
+    public void render(char[] currentWord, int failedAttempts, int totalAttempts, boolean finish, String wrongLetters) {
         if (finish) {
             System.out.printf((states[failedAttempts]) + "%n",
-                    String.valueOf(currentWord), totalAttempts - failedAttempts, WordGeneratorImpl.ANSWER);
+                    String.valueOf(currentWord), wrongLetters, totalAttempts - failedAttempts, WordGeneratorImpl.ANSWER);
             System.out.println("Ага, все так!");
         } else {
             System.out.printf((states[failedAttempts]) + "%n",
-                    String.valueOf(currentWord), totalAttempts - failedAttempts, WordGeneratorImpl.ANSWER);
+                    String.valueOf(currentWord), wrongLetters, totalAttempts - failedAttempts, WordGeneratorImpl.ANSWER);
         }
     }
 }
